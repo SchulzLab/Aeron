@@ -1,0 +1,47 @@
+#input files at top: check them!
+
+# all input files must be in the folder ./input/
+# use the full file name, including file ending
+
+# input splice graph
+# Should be in the input folder
+# format must be .vg
+graph: HumanUpdated38V5.gfa
+
+# reference transcripts
+# format can be either fasta/fastq, gzipped or not
+# Should be in the input folder
+
+transcripts: ReferenceTranscriptFastaFile.fa
+
+# sequenced reads
+# Should be in the input folder
+# format can be either fasta/fastq, gzipped or not
+# for more files, add them in new lines starting with "- "
+# NOTE: the file names without ending must be unique! You cannot have eg. reads.fq and reads.fa
+reads: 
+- SampleDataset.fq
+
+#optional params below: default values will probably work
+
+#size of the seed hits. Fewer means more accurate but slower alignments.
+seedsize: 17
+#max number of seeds. Fewer means faster but more inaccurate alignment
+maxseeds: 20
+
+alignment_selection: --greedy-length #Do not change
+alignment_E_cutoff: 1
+
+#bandwidth for the aligner. Higher means more accurate but slower alignment.
+aligner_bandwidth: 35
+
+gtffile: HomoSapiens.gtf
+
+#file paths
+
+# https://bitbucket.org/dilipdurai/aeron/
+scripts: scripts/
+# https://github.com/maickrau/GraphAligner
+binaries: binaries/
+# needed to convert mummer seeds to .gam seeds
+vgpath: path_to_vg_tools
