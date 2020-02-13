@@ -13,7 +13,7 @@ AERON was tested on different datasets of varying length and coverage and was fo
 
 The software can be downloaded by using the following command
 ```
-	git clone https://bitbucket.org/dilipdurai/aeron 
+	git clone https://github.com/SchulzLab/Aeron.git 
 ```
 
 ## Pipeline
@@ -27,7 +27,7 @@ The downloaded folder should contain a "snakemake-pipeline" folder which in tuen
 * Snakefile_fusion: Pipeline required to run the fusion-detection step of AERON
 
 ## Version
-0.01
+0.01 - first release version with quantification and fusion-gene detection ability
 
 ## Running
 1. In the folder of snakemake_pipeline, make a directory titled input  
