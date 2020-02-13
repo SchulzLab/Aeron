@@ -17,7 +17,7 @@ The software can be downloaded by using the following command
 ```
 
 ## Pipeline
-The downloaded folder should contain a "snakemake-pipeline" folder which in tuen contains the following files and folders:
+The downloaded folder should contain a "snakemake-pipeline" folder which contains the following files and folders:
 
 * Binaries: Folder consisting of all the binaries required by the aligner.
 * aeronscripts: Folder consisting of additional scripts required by the aligner and scripts to generate the graph file
@@ -27,7 +27,7 @@ The downloaded folder should contain a "snakemake-pipeline" folder which in tuen
 * Snakefile_fusion: Pipeline required to run the fusion-detection step of AERON
 
 ## Version
-0.01 - first release version with quantification and fusion-gene detection ability
+0.01 - first complete version with quantification and fusion-gene detection ability
 
 ## Running
 1. In the folder of snakemake_pipeline, make a directory titled input  
