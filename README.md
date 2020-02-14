@@ -22,7 +22,7 @@ The downloaded folder should contain a "snakemake-pipeline" folder which contain
 * AeronScripts: Folder consisting of additional scripts required by the aligner
 * Binaries: Folder consisting of all the binaries required by the aligner.
 * Graphbuilder: Folder consisting of scripts to generate the graph file namely GraphBuilder.py and ParseGTF.py
-* input: Folder containing a tar file consisting of a sample dataset, a sample human transcriptome graph file and a human specie annotation file in gtf format
+* input: Folder containing a sample graph file (in .gfa format)
 * config.yaml: Sample config file consisting of all the parameters required by AERON
 * Snakemake: Pipeline required to run quantification step of AERON
 * Snakefile_fusion: Pipeline required to run the fusion-detection step of AERON
@@ -36,14 +36,14 @@ To generate a graph file from a reference sequence, run the following command fr
 ```
 	python GraphBuilder -e Path_to_the_genome_sequence -g Path_to_the_genome_sequence -o Output_File  
 ```
-The above command would generate an "gfa" file which can be used for transcript quantification and gene-fusion detection step
+The above command would generate an "gfa" file which can be used for transcript quantification and gene-fusion detection step. A sample graph file generated from annotated transcripts of human specie (ENSEMBL v38) is provided in the input file. 
 
 Things to remember:
-- The genome sequence file should be in fasta format and should contain the chromosome sequences of the specie.
+- The genome sequence file should be in fasta format with each seqeunce representing a chromosome.
 - The number of chromosomes in the sequence fasta file should match the number of chromosomes in the gtf file.
 - The chromosome ids in the sequence fasta file should match the chromosome ids in the gtf file.
 
-### Quantification and gene-fusion detection
+### Quantification and gene-fusion event detection
 1. In the folder of snakemake_pipeline, make a directory titled input  
 2. Copy the input files to the "input" folder
 3. Input files should include:
