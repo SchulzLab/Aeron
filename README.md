@@ -20,7 +20,8 @@ The software can be downloaded by using the following command
 The downloaded folder should contain a "snakemake-pipeline" folder which contains the following files and folders:
 
 * Binaries: Folder consisting of all the binaries required by the aligner.
-* aeronscripts: Folder consisting of additional scripts required by the aligner and scripts to generate the graph file
+* aeronscripts: Folder consisting of additional scripts required by the aligner
+* Graphbuilder: Folder consisting of scripts to generate the graph file namely GraphBuilder.py and ParseGTF.py
 * input: Folder containing a tar file consisting of a sample dataset, a sample human transcriptome graph file and a human specie annotation file in gtf format
 * config.yaml: Sample config file consisting of all the parameters required by AERON
 * Snakemake: Pipeline required to run quantification step of AERON
@@ -30,6 +31,19 @@ The downloaded folder should contain a "snakemake-pipeline" folder which contain
 0.01 - first complete version with quantification and fusion-gene detection ability
 
 ## Running
+# Graph building
+To generate a graph file from a reference sequence, run the following command from the GraphBuilder folder:
+'''
+	python GraphBuilder -e Path_to_the_genome_sequence -g Path_to_the_genome_sequence -o Output_File  
+'''
+The above command would generate an "gfa" file which can be used for transcript quantification and gene-fusion detection step
+
+Things to remember:
+- The genome sequence file should be in fasta format and should contain the chromosome sequences of the specie.
+- The number of chromosomes in the sequence fasta file should match the number of chromosomes in the gtf file.
+- The chromosome ids in the sequence fasta file should match the chromosome ids in the gtf file.
+
+# Quantification and gene-fusion detection
 1. In the folder of snakemake_pipeline, make a directory titled input  
 2. Copy the input files to the "input" folder
 3. Input files should include:
