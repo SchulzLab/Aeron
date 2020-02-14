@@ -19,8 +19,8 @@ The software can be downloaded by using the following command
 ## Pipeline
 The downloaded folder should contain a "snakemake-pipeline" folder which contains the following files and folders:
 
+* AeronScripts: Folder consisting of additional scripts required by the aligner
 * Binaries: Folder consisting of all the binaries required by the aligner.
-* aeronscripts: Folder consisting of additional scripts required by the aligner
 * Graphbuilder: Folder consisting of scripts to generate the graph file namely GraphBuilder.py and ParseGTF.py
 * input: Folder containing a tar file consisting of a sample dataset, a sample human transcriptome graph file and a human specie annotation file in gtf format
 * config.yaml: Sample config file consisting of all the parameters required by AERON
