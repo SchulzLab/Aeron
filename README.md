@@ -31,7 +31,7 @@ The downloaded folder should contain a "snakemake-pipeline" folder which contain
 0.01 - first complete version with quantification and fusion-gene detection ability
 
 ## Running
-# Graph building
+### Graph building
 To generate a graph file from a reference sequence, run the following command from the GraphBuilder folder:
 '''
 	python GraphBuilder -e Path_to_the_genome_sequence -g Path_to_the_genome_sequence -o Output_File  
@@ -43,7 +43,7 @@ Things to remember:
 - The number of chromosomes in the sequence fasta file should match the number of chromosomes in the gtf file.
 - The chromosome ids in the sequence fasta file should match the chromosome ids in the gtf file.
 
-# Quantification and gene-fusion detection
+### Quantification and gene-fusion detection
 1. In the folder of snakemake_pipeline, make a directory titled input  
 2. Copy the input files to the "input" folder
 3. Input files should include:
