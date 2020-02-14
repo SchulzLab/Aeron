@@ -33,9 +33,9 @@ The downloaded folder should contain a "snakemake-pipeline" folder which contain
 ## Running
 ### Graph building
 To generate a graph file from a reference sequence, run the following command from the GraphBuilder folder:
-'''
+```
 	python GraphBuilder -e Path_to_the_genome_sequence -g Path_to_the_genome_sequence -o Output_File  
-'''
+```
 The above command would generate an "gfa" file which can be used for transcript quantification and gene-fusion detection step
 
 Things to remember:
