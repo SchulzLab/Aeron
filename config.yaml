@@ -20,7 +20,7 @@ transcripts: ReferenceTranscriptFastaFile.fa
 # for more files, add them in new lines starting with "- "
 # NOTE: the file names without ending must be unique! You cannot have eg. reads.fq and reads.fa
 reads: 
-- SampleDataset.fq
+- input file name (in fastq format)
 
 #optional params below: default values will probably work
 
@@ -35,7 +35,7 @@ alignment_E_cutoff: 1
 #bandwidth for the aligner. Higher means more accurate but slower alignment.
 aligner_bandwidth: 35
 
-gtffile: HomoSapiens.gtf
+gtffile: gtf file of the specie
 
 #file paths
 
