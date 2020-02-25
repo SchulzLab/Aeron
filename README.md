@@ -36,10 +36,10 @@ To generate a graph file from a reference sequence, run the following command fr
 ```
 	python GraphBuilder -e Path_to_the_genome_sequence -g Path_to_the_genome_sequence -o Output_File  
 ```
-The above command would generate an "gfa" file which can be used for transcript quantification and gene-fusion detection step. A sample graph file generated from annotated transcripts of human specie (ENSEMBL v38) is provided in the input file. 
+The above command will generate a "gfa" file which can be used for the transcript quantification and gene-fusion detection step. A sample graph file generated from annotated transcripts of human (ENSEMBL v92, hg38) is provided in the input file. 
 
 Things to remember:
-- The genome sequence file should be in fasta format with each seqeunce representing a chromosome.
+- The genome sequence file should be in fasta format with each sequence representing a chromosome.
 - The number of chromosomes in the sequence fasta file should match the number of chromosomes in the gtf file.
 - The chromosome ids in the sequence fasta file should match the chromosome ids in the gtf file.
 
@@ -67,13 +67,13 @@ Snakemake --cores=no_of_cores all  (experiments were run using 10 cores)
 
 For gene-fusion detection
 
-- Run the following command
+- Run the following command (adjusting the number of cores as needed)
 ```
 snakemake --cores 40 all -s Snakefile_fusion
 ```
 - The quantification results will be in a folder named output  
 
 ## Things to take care of
-- AERON run will create a folder called tmp to store temporary files. The files are named according to the input file given to the program. For instance, a file containing node name to integer mapping for a graph file MyGraph.gfa will be named as MyGraph_nodemapping.txt. If, in another run, the program is using a graph file with the same name (MyGraph), then AERON wont create a new file. Instead it will use the old mapping file 
+- An AERON run will create a folder called tmp to store temporary files. The files are named according to the input file given to the program. For instance, a file containing node name to integer mapping for a graph file MyGraph.gfa will be named as MyGraph_nodemapping.txt. If, in another run, the program is using a graph file with the same name (MyGraph), then AERON wont create a new file. Instead it will use the old mapping file. 
 
 
