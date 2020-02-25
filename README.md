@@ -71,7 +71,7 @@ For gene-fusion detection
 ```
 snakemake --cores 40 all -s Snakefile_fusion
 ```
-- The quantification results will be in a folder named output  
+- The fusion detection results will be in a folder named output  
 
 ## Things to take care of
 - An AERON run will create a folder called tmp to store temporary files. The files are named according to the input file given to the program. For instance, a file containing node name to integer mapping for a graph file MyGraph.gfa will be named as MyGraph_nodemapping.txt. If, in another run, the program is using a graph file with the same name (MyGraph), then AERON wont create a new file. Instead it will use the old mapping file. 
