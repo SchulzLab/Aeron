@@ -60,7 +60,7 @@ For quantification:
 - Run the following command
 
 ```
-Snakemake --cores=no_of_cores all  (experiments were run using 10 cores)  
+snakemake --cores=no_of_cores all  (experiments were run using 10 cores)  
 ```
 - The quantification results will be in a folder named output  
 
