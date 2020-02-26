@@ -29,8 +29,8 @@ class SequenceAnalyser():
 		sequence=""
 		while line:
 			if (re.match(r'^\>', line.rstrip())):
-				Sequences[seq_id] = sequence				
-				seq_id = line.rstrip()
+				Sequences[seq_id] = sequence
+				seq_id = (line.rstrip().split(" "))[0]
 				sequence=""				
 			else:
 				sequence=sequence+(line.rstrip())
@@ -41,7 +41,7 @@ class SequenceAnalyser():
 	def getExonSequences(self, Sequences, exons, gb):
 		Esequences = {}
 		for exon in exons:
-			key = ">chr"+gb.getChromosome(exon)[0]
+			key = ">"+gb.getChromosome(exon)[0]
 			sequence = Sequences[key]
 			length = gb.getEnd(exon) - gb.getStart(exon) 
 			Esequence[exon] = sequence[(gb.getStart(exon)-1):gb.getStart(exon)+length]
@@ -133,9 +133,13 @@ class GraphBuild():
 		return nodes,nodee,chrnod
 	
 	def getNodeConnections(self, nodeid, ndst, nden, chrnod, Sequences, nodes, connections):
+		bookkeep = {}
+		for i in range(0, len(nodeid)):
+			bookkeep[nodeid[ndst[i]]]=0
+
 		for i in range(0, len(nodeid)):
 			chromo = chrnod[i]
-			key=">chr"+chromo
+			key=">"+chromo
 			if(key in Sequences.keys()):
 				sequence = Sequences[key]			
 				length = (nden[i]-ndst[i])+1
@@ -145,10 +149,20 @@ class GraphBuild():
 					if(i<=(len(ndst)-1)):
 						sseq = sequence[ndst[i]-1:(ndst[i]+length)]
 					nodes.append("S	"+str(nodeid[ndst[i]])+"	"+sseq)
+					bookkeep[str(nodeid[ndst[i]])] = 1
 		for i in range(0, len(nodeid)):
-			for j in range(i+1, len(nodeid)):
-				connections.append("L	"+str(nodeid[ndst[i]])+"	+	"+str(nodeid[ndst[j]])+"	+	0M")
+			if(bookkeep[str(nodeid[ndst[i]])]==1):
+				for j in range(i+1, len(nodeid)):
+					if(bookkeep[str(nodeid[ndst[j]])]==1):
+						connections.append("L	"+str(nodeid[ndst[i]])+"	+	"+str(nodeid[ndst[j]])+"	+	0M")
 		return nodes, connections
+
+	def sanityCheck(self, nodes, connections):
+		if len(nodes)==0:
+			print("Warning: No sequence information added")
+		if len(connections)==0:
+			print("Warning: No connection information added")
+		
 
 po  = ParseOptions().getoptions()
 gb  = GraphBuild()
@@ -174,7 +188,6 @@ transcripts = pg.getAllGenes()
 print("Building graph for:")
 
 for transcript in transcripts:
-	print(transcript)
 	ex = pg.getExons(transcript)
 	start,end, chromosome = gb.SortExons(pg, ex)
 	cluster, cchromosome = gb.DefineCluster(start, end, chromosome)
@@ -186,4 +199,6 @@ for i in nodes:
 	f.write(i+"\n")
 
 for i in connections:
-	f.write(i+"\n")	
+	f.write(i+"\n")
+
+gb.sanityCheck(nodes, connections)
