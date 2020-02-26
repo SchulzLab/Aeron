@@ -36,7 +36,9 @@ To generate a graph file from a reference sequence, run the following command fr
 ```
 	python GraphBuilder -e Path_to_the_genome_sequence -g Path_to_the_gtf_file -o Output_File  
 ```
-The above command will generate a "gfa" file which can be used for the transcript quantification and gene-fusion detection step. A sample graph file generated from annotated transcripts of human (ENSEMBL v92, hg38) is provided in the input file. 
+The above command will generate a "gfa" file which can be used for the transcript quantification and gene-fusion detection step. 
+
+A sample graph file generated from annotated transcripts of human (ENSEMBL v92, hg38) is provided in the input file. 
 
 Things to remember:
 - The genome sequence file should be in fasta format with each sequence representing a chromosome.
@@ -44,16 +46,15 @@ Things to remember:
 - The chromosome ids in the sequence fasta file should match the chromosome ids in the gtf file.
 
 ### Quantification and gene-fusion event detection
-1. In the folder of snakemake_pipeline, make a directory titled input  
+1. In the folder Aeron, make a directory titled input  
 2. Copy the input files to the "input" folder
 3. Input files should include:
 	* The input file in fasta or fastq format. 
-	* A graph file in .gfa format. 
+	* A graph file in .gfa format.   
 	* Annotation file of the species in gtf format. 
 	* Reference sequence in fasta or fastq format.
 4. Make sure that there is no underscores in the file names, graph .gfa, reads .fq, transcripts .fa  
-5. Edit config.yaml, add input file names.
-6. Example config file is provided in the repository
+5. Edit config.yaml, add input file names. An example config file is provided in the repository
 
 For quantification:
 
@@ -73,7 +74,11 @@ snakemake --cores 40 all -s Snakefile_fusion
 ```
 - The fusion detection results will be in a folder named output  
 
-## Things to take care of
-- An AERON run will create a folder called tmp to store temporary files. The files are named according to the input file given to the program. For instance, a file containing node name to integer mapping for a graph file MyGraph.gfa will be named as MyGraph_nodemapping.txt. If, in another run, the program is using a graph file with the same name (MyGraph), then AERON wont create a new file. Instead it will use the old mapping file. 
+## Things to remember:
+1.	The graph file given with the repository has been generated using annotated transcripts of human (ENSEMBL v92, hg38). Hence, the file can be used as an input. There is no need to generate a new graph file.
+
+2.	You only need to create the input folder once. Multiple files can be included in the input folder. Also, multiple snakemake runs can be executed using the same input folder.
+
+3.	 An AERON run will create a folder called tmp to store temporary files. The files are named according to the input file given to the program. For instance, a file containing node name to integer mapping for a graph file MyGraph.gfa will be named as MyGraph_nodemapping.txt. If, in another run, the program is using a graph file with the same name (MyGraph), then AERON wont create a new file. Instead it will use the old mapping file. This tmp folder can be removed after every snakemake run 
 
 
