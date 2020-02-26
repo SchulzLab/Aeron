@@ -39,9 +39,8 @@ gtffile: gtf file of the specie
 
 #file paths
 
-# https://bitbucket.org/dilipdurai/aeron/
 scripts: AeronScripts/
-# https://github.com/maickrau/GraphAligner
+
 binaries: Binaries/
 # needed to convert mummer seeds to .gam seeds
 vgpath: path_to_vg_tools
