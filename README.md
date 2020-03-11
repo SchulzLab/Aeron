@@ -24,7 +24,7 @@ The downloaded folder should contain a "snakemake-pipeline" folder which contain
 * Graphbuilder: Folder consisting of scripts to generate the graph file namely GraphBuilder.py and ParseGTF.py
 * input: Folder containing a sample graph file (in .gfa format)
 * config.yaml: Sample config file consisting of all the parameters required by AERON
-* Snakemake: Pipeline required to run quantification step of AERON
+* Snakefile: Pipeline required to run quantification step of AERON
 * Snakefile_fusion: Pipeline required to run the fusion-detection step of AERON
 
 ## Version
