@@ -24,6 +24,9 @@ reads:
 
 #optional params below: default values will probably work
 
+fusion_max_error_rate: 0.2
+fusion_min_score_difference: 200
+
 #size of the seed hits. Fewer means more accurate but slower alignments.
 seedsize: 17
 #max number of seeds. Fewer means faster but more inaccurate alignment
