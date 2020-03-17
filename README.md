@@ -48,7 +48,7 @@ Things to remember:
 1. In the folder Aeron, make a directory titled input  
 2. Copy the input files to the "input" folder
 3. Input files should include:
-	* The input file in fasta or fastq format. 
+	* The input read file(s) in fasta or fastq format. 
 	* A graph file in .gfa format.   
 	* Annotation file of the species in gtf format. 
 	* Reference sequence in fasta or fastq format.
@@ -72,7 +72,8 @@ input | /path/to/readfile | Absolute path of the input read fasta/q file. If the
 
 For gene-fusion detection
 
-- Run the following command (adjusting the number of cores as needed)
+- First run the quantification (see above)
+- Then run the following command (adjusting the number of cores as needed)
 ```
 snakemake --cores 40 all -s Snakefile_fusion
 ```
