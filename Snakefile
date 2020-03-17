@@ -94,7 +94,7 @@ rule assign_reads_to_transcripts:
 	output:
 		"output/matrix_{reads}_{transcripts}_{graph}_all.txt"
 	benchmark:
-		"benchmark/assign_reads_to_transcript.txt"
+		"benchmark/assign_reads_to_transcript_{reads}_{transcripts}_{graph}.txt"
 	shell:
 		"{ALIGNERBINPATH}/AlignmentSubsequenceIdentity {input.transcripts} {input.readalns} {input.readfa} > {output}"
 
@@ -194,6 +194,6 @@ rule generateCountMatrix:
 	output:
 		"output/CountMatrix_{reads}_{transcripts}_{graph}.txt"
 	benchmark:
-		"benchmark/generateCount_{reads}_{graph}.txt"
+		"benchmark/generateCount_{reads}_{transcripts}_{graph}.txt"
 	shell:
 		"python {SCRIPTPATH}/ThreePrime.py -g {input.gtffile} -m {input.matrix} -j {input.jsonfile} >> {output}"
