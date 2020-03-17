@@ -77,7 +77,7 @@ For gene-fusion detection
 ```
 snakemake --cores 40 all -s Snakefile_fusion
 ```
-- The fusion detection results will be in a folder named output  
+- The fusion detection results will be in a folder named fusionoutput  
 
 ## Things to remember:
 1.	The graph file given with the repository has been generated using annotated transcripts of human (ENSEMBL v92, hg38). Hence, the file can be used as an input. There is no need to generate a new graph file.
