@@ -22,7 +22,16 @@ transcripts: ReferenceTranscriptFastaFile.fa
 reads: 
 - input file name (in fastq format)
 
-#optional params below: default values will probably work
+# Needed for expression quantificatino
+# Should be in the input folder
+gtffile: gtf file of the species
+
+# needed to convert between alignment formats
+# https://github.com/vgteam/vg
+vgpath: path_to_vg_tools
+
+
+#optional parameters below: default values will probably work
 
 fusion_max_error_rate: 0.2
 fusion_min_score_difference: 200
@@ -32,18 +41,13 @@ seedsize: 17
 #max number of seeds. Fewer means faster but more inaccurate alignment
 maxseeds: 20
 
-alignment_selection: --greedy-length #Do not change
+# No need to change these
+
+aligner_bandwidth: 35
+alignment_selection: --greedy-length
 alignment_E_cutoff: 1
 
-#bandwidth for the aligner. Higher means more accurate but slower alignment.
-aligner_bandwidth: 35
+scripts: AeronScripts
+binaries: Binaries
 
-gtffile: gtf file of the specie
 
-#file paths
-
-scripts: AeronScripts/
-
-binaries: Binaries/
-# needed to convert mummer seeds to .gam seeds
-vgpath: path_to_vg_tools
