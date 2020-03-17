@@ -66,6 +66,11 @@ snakemake --cores=no_of_cores all  (experiments were run using 10 cores)
 - The quantification results will be in a folder named output  
 
 
+parameter | value | explanation 
+-----------|--------------|---------
+input | /path/to/readfile | Absolute path of the input read fasta/q file. If the data is paired end, then they should either be interleaved together to form a single file or given as two comma separated filenames. Multiple files of singl-end reads should be combined together to form one file. Please avoid using symbols such as ~ in the file path. 
+
+
 For gene-fusion detection
 
 - Run the following command (adjusting the number of cores as needed)
