@@ -19,9 +19,8 @@ The software can be downloaded by using the following command
 ## Pipeline
 The downloaded folder should contain a "snakemake-pipeline" folder which contains the following files and folders:
 
-* AeronScripts: Folder consisting of additional scripts required by the aligner
-* Binaries: Folder consisting of all the binaries required by the aligner.
-* Graphbuilder: Folder consisting of scripts to generate the graph file namely GraphBuilder.py and ParseGTF.py
+* AeronScripts: Folder consisting of scripts to generate the graph file namely GraphBuilder.py and ParseGTF.py and additional scripts required by the pipeline
+* Binaries: Folder consisting of all the binaries required by the pipeline
 * input: Folder containing a sample graph file (in .gfa format)
 * config.yaml: Sample config file consisting of all the parameters required by AERON
 * Snakefile: Pipeline required to run quantification step of AERON
@@ -32,7 +31,7 @@ The downloaded folder should contain a "snakemake-pipeline" folder which contain
 
 ## Running
 ### Graph building
-To generate a graph file from a reference sequence, run the following command from the GraphBuilder folder:
+To generate a graph file from a reference sequence, run the following command from the AeronScripts folder:
 ```
 	python GraphBuilder -e Path_to_the_genome_sequence -g Path_to_the_gtf_file -o Output_File  
 ```
