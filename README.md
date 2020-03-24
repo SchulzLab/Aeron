@@ -60,7 +60,7 @@ parameter | default | explanation
 ----- | ----- | -----
 graph | - | Relative or absolute path of the input graph generated with the graph building script
 transcripts | - | Relative or absolute path of the reference transcripts in fasta/q format
-reads | - | Relative or absolute path of the input long read fasta/q file(s). Multiple files can be included by placing each of them in its own line 
+reads | - | Name of the input long read fasta/q file(s). Multiple files can be included by placing each of them in its own line. the files should be in the input folder. Do not include "input/". 
 gtffile | - | Relative or absolute path of the gtf file used for building the graph
 vgpath | - | Relative or absolute path of the vg toolkit binary (https://github.com/vgteam/vg)
 fusion_max_error_rate | 0.2 | Maximum allowed error rate for a read to support a fusion. If a read aligns to a predicted fusion transcript with a higher error rate, it is considered to not support the fusion.
