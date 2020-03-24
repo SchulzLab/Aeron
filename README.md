@@ -65,9 +65,17 @@ snakemake --cores=no_of_cores all  (experiments were run using 10 cores)
 - The quantification results will be in a folder named output  
 
 
-parameter | value | explanation 
------------|--------------|---------
-input | /path/to/readfile | Absolute path of the input read fasta/q file. If the data is paired end, then they should either be interleaved together to form a single file or given as two comma separated filenames. Multiple files of singl-end reads should be combined together to form one file. Please avoid using symbols such as ~ in the file path. 
+parameter | default | explanation
+----- | ----- | -----
+graph | - | Relative or absolute path of the input graph generated with the graph building script
+transcripts | - | Relative or absolute path of the reference transcripts in fasta/q format
+reads | - | Relative or absolute path of the input long read fasta/q file(s). Multiple files can be included by placing each of them in its own line 
+gtffile | - | Relative or absolute path of the gtf file used for building the graph
+vgpath | - | Relative or absolute path of the vg toolkit binary (https://github.com/vgteam/vg)
+fusion_max_error_rate | 0.2 | Maximum allowed error rate for a read to support a fusion. If a read aligns to a predicted fusion transcript with a higher error rate, it is considered to not support the fusion.
+fusion_min_score_difference | 200 | Minimum score difference for a read to support a fusion. If a read aligns to both a reference transcript and a predicted fusion transcript, and the score difference is less than the parameter, it is considered to not support the fusion. Higher values lead to a higher precision (higher fraction of predicted fusions are real) at the cost of lower sensitivity (smaller number of real fusions are detected).
+seedsize | 17 | Minimum size of an exact match between a read and a transcript to be used for alignment in the quantification pipeline. Higher values lead to faster runtime for quantification but potentially lower accuracy.
+maxseeds | 20 | Number of exact matches used for alignment in the quantification pipeline. Higher values lead to a slower runtime for quantification but potentially higher accuracy.
 
 
 For gene-fusion detection
