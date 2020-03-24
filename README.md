@@ -55,15 +55,6 @@ Things to remember:
 4. Make sure that there is no underscores in the file names, graph .gfa, reads .fq, transcripts .fa  
 5. Edit config.yaml, add input file names. An example config file is provided in the repository
 
-For quantification:
-
-- Run the following command
-
-```
-snakemake --cores=no_of_cores all  (experiments were run using 10 cores)  
-```
-- The quantification results will be in a folder named output  
-
 
 parameter | default | explanation
 ----- | ----- | -----
@@ -77,6 +68,14 @@ fusion_min_score_difference | 200 | Minimum score difference for a read to suppo
 seedsize | 17 | Minimum size of an exact match between a read and a transcript to be used for alignment in the quantification pipeline. Higher values lead to faster runtime for quantification but potentially lower accuracy.
 maxseeds | 20 | Number of exact matches used for alignment in the quantification pipeline. Higher values lead to a slower runtime for quantification but potentially higher accuracy.
 
+For quantification:
+
+- Run the following command
+
+```
+snakemake --cores=no_of_cores all  (experiments were run using 10 cores)  
+```
+- The quantification results will be in a folder named output  
 
 For gene-fusion detection
 
