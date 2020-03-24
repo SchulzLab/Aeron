@@ -66,6 +66,19 @@ class ParseGTF():
 				i=i+1
 		return genes
 
+        def getTranscriptPosition(self, key):
+            allexons = eg[key]
+            startpoint=0
+            endpoint=0
+            if(len(allexons)>0):
+                startpoint=int(ee[allexons[0]][0])
+                endpoint=0
+                for e in allexons:
+                    en=int(ee[e][0])
+                    if(en>endpoint):
+                        endpoint=en
+            return startpoint,endpoint
+
 	def getAllTranscripts(self):
 		i=0
 		transcripts = []
