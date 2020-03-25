@@ -33,7 +33,7 @@ The downloaded folder should contain a "snakemake-pipeline" folder which contain
 
 ## Running
 
-### About
+### Overview
 Aeron, currently consists of 3 steps: Graph building, Quantification, Fusion-gene detection. Which need to be done in this order. 
 
 1. **Graph building** - A transcriptome graph collection is created using known transcripts as anntotation, which is saved as an index (gfa file). In this collection each graph describes the exons of each annotated gene and contains the path information of transcript of that gene  For any given dataset this index can be used to run step 2.
@@ -97,6 +97,16 @@ For gene-fusion detection
 snakemake --cores 40 all -s Snakefile_fusion
 ```
 - The fusion detection results will be in a folder named fusionoutput  
+
+The predicted fusion gene candidates need to be analyzed carefully. In out preprint we delineate additional steps that should be considered to validate/analyze predicted fusion genes.
+
+## Citation (and more details)
+AERON: Transcript quantification and gene-fusion detection using long reads
+
+Mikko Rautiainen$, Dilip A Durai$, Ying Chen, Lixia Xin, Hwee Meng Low, Jonathan Göke, Tobias Marschall**, Marcel H. Schulz,**
+[link to preprint](https://www.biorxiv.org/content/10.1101/2020.01.27.921338v1.full)
+
+$ joint first authors, ** corresponding authors
 
 ## Things to remember:
 1.	The graph file given with the repository has been generated using annotated transcripts of human (ENSEMBL v92, hg38). Hence, the file can be used as an input. There is no need to generate a new graph file.
