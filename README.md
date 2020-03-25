@@ -28,14 +28,25 @@ The downloaded folder should contain a "snakemake-pipeline" folder which contain
 
 ## Version
 0.01 - first complete version with quantification and fusion-gene detection ability
+0.02 - updated readme and bugfixes. Thanks for the user support. (24.3.2020)
 
 ## Running
+
+### About
+Aeron, currently consists of 3 steps: Graph building, Quantification, Fusion-gene detection. Which need to be done in this order. 
+
+1. **Graph building** - A transcriptome graph collection is created using known transcripts as anntotation, which is saved as an index (gfa file). In this collection each graph describes the exons of each annotated gene and contains the path information of transcript of that gene  For any given dataset this index can be used to run step 2.
+2. **Quantification** - Using a set of long reads, Aeron aligns those reads against the graph index. Then the alignments are processed and reads are assigned to transcripts based on alignment statistics. The output of this step are the read counts per transcript and files necessary for step 3.
+3. **Fusion-gene detection** - Unmapped reads are considered to be fusion read candidates. Based on partial alignments of reads to different genes a second type of graph, the *fusion graph*, is constructed. Reads are then aligned to all fusion candidates represented in the fusion graph and the complete transcriptome. Foe each cnadidate fusin a fusion score is computed and filters are applied to derive a list of final putative  fusion transcripts.
+
+Details how to execute all of those steps are found below.
+
 ### Graph building
 To generate a graph file from a reference sequence, run the following command from the AeronScripts folder:
 ```
 	python GraphBuilder -e Path_to_the_genome_sequence -g Path_to_the_gtf_file -o Output_File  
 ```
-The above command will generate a "gfa" file which can be used for the transcript quantification and gene-fusion detection step. 
+The above command will generate a "gfa" file, which must be used for the transcript quantification and gene-fusion detection steps. 
 
 A sample graph file generated from annotated transcripts of human (ENSEMBL v92, hg38) is provided in the input file. 
 
