@@ -29,7 +29,7 @@ The downloaded folder should contain a "snakemake-pipeline" folder which contain
 ## Version
 0.01 - first complete version with quantification and fusion-gene detection ability
 
-0.02 - updated readme and bugfixes. Thanks for the user support. (24.3.2020)
+0.02 - updated readme and bugfixes. Thanks for the user feedback. (24.3.2020)
 
 ## Running
 
