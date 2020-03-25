@@ -12,6 +12,8 @@ GTFPATH = config["gtffile"]
 ALIGNMENTSELECTION = config["alignment_selection"]
 ECUTOFF = config["alignment_E_cutoff"]
 
+if isinstance(READFILE_FULLNAME, str): READFILE_FULLNAME = [READFILE_FULLNAME]
+
 READFILE_NAME = [path.split('.')[0] for path in READFILE_FULLNAME]
 TRANSCRIPTFILE_NAME = TRANSCRIPTFILE_FULLNAME.split('.')[0]
 GRAPHFILE_NAME = GRAPHFILE_FULLNAME.split('.')[0]
