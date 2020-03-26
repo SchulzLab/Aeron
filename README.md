@@ -34,7 +34,7 @@ The downloaded folder should contain a "snakemake-pipeline" folder which contain
 ## Running
 
 ### Overview
-Aeron, currently consists of 3 steps: Graph building, Quantification, Fusion-gene detection. Which need to be done in this order. 
+Aeron, currently consists of 3 steps: Graph building, Quantification, Fusion-gene detection.  
 
 1. **Graph building** - A transcriptome graph collection is created using known transcripts as anntotation, which is saved as an index (gfa file). In this collection each graph describes the exons of each annotated gene and contains the path information of transcript of that gene  For any given dataset this index can be used to run step 2.
 2. **Quantification** - Using a set of long reads, Aeron aligns those reads against the graph index. Then the alignments are processed and reads are assigned to transcripts based on alignment statistics. The output of this step are the read counts per transcript and files necessary for step 3.
@@ -47,7 +47,7 @@ To generate a graph file from a reference sequence, run the following command fr
 ```
 	python GraphBuilder -e Path_to_the_genome_sequence -g Path_to_the_gtf_file -o Output_File  
 ```
-The above command will generate a "gfa" file, which must be used for the transcript quantification and gene-fusion detection steps. 
+The above command will generate a "gfa" file, which must be used for the transcript quantification and gene-fusion detection steps. The graph file generated during this step can be used for multiple datasets 
 
 A sample graph file generated from annotated transcripts of human (ENSEMBL v92, hg38) is provided in the input file. 
 
@@ -55,6 +55,7 @@ Things to remember:
 - The genome sequence file should be in fasta format with each sequence representing a chromosome.
 - The number of chromosomes in the sequence fasta file should match the number of chromosomes in the gtf file.
 - The chromosome ids in the sequence fasta file should match the chromosome ids in the gtf file.
+
 
 ### Quantification and gene-fusion event detection
 1. In the folder Aeron, make a directory titled input  
