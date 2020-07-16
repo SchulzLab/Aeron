@@ -35,6 +35,7 @@ vgpath: path_to_vg_tools
 
 fusion_max_error_rate: 0.2
 fusion_min_score_difference: 200
+fusion_read_chunk_size: 1000000
 
 #size of the seed hits. Fewer means more accurate but slower alignments.
 seedsize: 17

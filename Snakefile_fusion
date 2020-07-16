@@ -6,6 +6,7 @@ TRANSCRIPTFILE_FULLNAME = config["transcripts"]
 GRAPHFILE_FULLNAME = config["graph"]
 FUSION_MAX_ERROR_RATE = config["fusion_max_error_rate"]
 FUSION_MIN_SCORE_DIFFERENCE = config["fusion_min_score_difference"]
+FUSION_READ_CHUNK_SIZE = config["fusion_read_chunk_size"]
 SEEDSIZE = config["seedsize"]
 MAXSEEDHITS = config["maxseeds"]
 ALIGNERBANDWIDTH = config["aligner_bandwidth"]
@@ -95,7 +96,7 @@ rule fusionfinder:
 		stderr = "fusiontmp/fusionfinder_stderr_{reads}_{transcripts}_{graph}.txt",
 		stdout = "fusiontmp/fusionfinder_stdout_{reads}_{transcripts}_{graph}.txt"
 	threads: 40
-	shell: "/usr/bin/time -v {ALIGNERBINPATH}/FusionFinder {input.graph} {input.loose_fusions} {input.pairmatrix} {input.transcriptaln} {input.reads} 1 1.0 1 1 {threads} {output.fusions} {output.corrected} 1> {log.stdout} 2> {log.stderr}"
+	shell: "/usr/bin/time -v {ALIGNERBINPATH}/FusionFinder {input.graph} {input.loose_fusions} {input.pairmatrix} {input.transcriptaln} {input.reads} 1 1.0 1 1 {threads} {output.fusions} {output.corrected} {FUSION_READ_CHUNK_SIZE} 1> {log.stdout} 2> {log.stderr}"
 
 rule filter_fusions:
 	input: rules.fusionfinder.output.fusions
