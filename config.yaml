@@ -4,50 +4,42 @@
 # use the full file name, including file ending
 
 # input splice graph
-# Should be in the input folder
 # format must be .vg
 graph: HumanUpdated38V5.gfa
 
 # reference transcripts
 # format can be either fasta/fastq, gzipped or not
-# Should be in the input folder
-
-transcripts: ReferenceTranscriptFastaFile.fa
-
+transcripts: HumanTranscriptsReduced.fa
 # sequenced reads
-# Should be in the input folder
 # format can be either fasta/fastq, gzipped or not
 # for more files, add them in new lines starting with "- "
 # NOTE: the file names without ending must be unique! You cannot have eg. reads.fq and reads.fa
-reads: 
-- input file name (in fastq format)
+reads: humanNA12878dRNA.fasta
 
-# Needed for expression quantificatino
-# Should be in the input folder
-gtffile: gtf file of the species
-
-# needed to convert between alignment formats
-# https://github.com/vgteam/vg
-vgpath: path_to_vg_tools
-
-
-#optional parameters below: default values will probably work
-
-fusion_max_error_rate: 0.2
-fusion_min_score_difference: 200
+#optional params below: default values will probably work
 
 #size of the seed hits. Fewer means more accurate but slower alignments.
 seedsize: 17
 #max number of seeds. Fewer means faster but more inaccurate alignment
-maxseeds: 20
+maxseeds: 17
 
-# No need to change these
+fusion_max_error_rate: 0.2
+fusion_min_score_difference: 200
 
-aligner_bandwidth: 35
+#options: --greedy-length --greedy-score --greedy-E --schedule-score --schedule-length --schedule-inverse-E-product --schedule-inverse-E-sum
 alignment_selection: --greedy-length
 alignment_E_cutoff: 1
 
-scripts: AeronScripts
-binaries: Binaries
+#bandwidth for the aligner. Higher means more accurate but slower alignment.
+aligner_bandwidth: 35
 
+gtffile: HomoSapiens.gtf
 
+#file paths
+
+# https://bitbucket.org/dilipdurai/aeron/
+scripts: /MMCI/MS/LongRNA/work/mikko/AERON_runs/run_20200515_threeprime/Aeron/AeronScripts
+# https://github.com/maickrau/GraphAligner
+binaries: /MMCI/MS/LongRNA/work/mikko/AERON_runs/run_20200515_threeprime/Aeron/Binaries
+# needed to convert mummer seeds to .gam seeds
+vgpath: /MMCI/MS/LongRNA/work/mikko/vg/vg
