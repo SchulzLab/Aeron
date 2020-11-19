@@ -64,9 +64,9 @@ Things to remember:
 	* The input read file(s) in fasta or fastq format. 
 	* A graph file in .gfa format.   
 	* Annotation file of the species in gtf format. 
-	* Reference sequence in fasta or fastq format.
+	* Transcript sequences (not genome) in fasta or fastq format.
 4. Make sure that there is no underscores in the file names, graph .gfa, reads .fq, transcripts .fa  
-5. Edit config.yaml, add input file names. An example config file is provided in the repository
+5. Edit config.yaml, add input file names. An example config file is provided in the repository. Below we explain some of the parameters to be set in the config.yaml with more details.
 
 
 parameter | default | explanation
