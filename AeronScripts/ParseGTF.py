@@ -87,5 +87,3 @@ class ParseGTF():
                 transcripts.append(key)
                 i=i+1
         return transcripts
-
-
