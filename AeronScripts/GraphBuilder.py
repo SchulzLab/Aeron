@@ -5,6 +5,7 @@
 import os
 import sys
 import re
+from collections import defaultdict
 import optparse
 from optparse import OptionParser
 from optparse import Option, OptionValueError
@@ -35,7 +36,7 @@ class SequenceAnalyser():
 			else:
 				sequence=sequence+(line.rstrip())
 			line = f.readline()
-		Seiquences[seq_id] = sequence
+		Sequences[seq_id] = sequence
 		return Sequences
 	
 	def getExonSequences(self, Sequences, exons, gb):
@@ -44,22 +45,14 @@ class SequenceAnalyser():
 			key = ">"+gb.getChromosome(exon)[0]
 			sequence = Sequences[key]
 			length = gb.getEnd(exon) - gb.getStart(exon) 
-			Esequence[exon] = sequence[(gb.getStart(exon)-1):gb.getStart(exon)+length]
+			Esequences[exon] = sequence[(gb.getStart(exon)-1):gb.getStart(exon)+length]
 		return Esequences
 
 class GraphBuild():
-	def SortExons(self, gb, exons):
-		start = []
-		end = []
-		chromosome = []
-		exn = []
-		for exon in exons:
-			start.append(gb.getStart(exon))
-			chromosome.append(gb.getChromosome(exon)[0])
-			end.append(gb.getEnd(exon))
-		end = [ed for _, ed in sorted(zip(start,end))]
-		chromosome = [cd for _, cd in sorted(zip(start,chromosome))]		
-		start = sorted(start)
+	def SortExons(self, exons: pd.DataFrame):
+		exons_sorted = exons.sort_values(by="start")[["exon start", "exon end", "chr"]]
+		start, end, chromosome = exons_sorted["exon start"], exons_sorted["exon end"], exons_sorted["chr"]
+		
 		return start,end,chromosome
 	
 	def DefineCluster(self, start, end, chromosome):
@@ -103,13 +96,13 @@ class GraphBuild():
 			cchromosome[i] = sorted(cchromosome[i])
 		return cluster,cchromosome
 
-	def getNodeID(self, gb, nodes, nodee, exons):
+	def getNodeID(self, nodes, nodee, exons):
 		nid = {}
-		for exon in exons:
-			enumber = gb.getExonNumber(exon)
-			estart = gb.getStart(exon)
-			eend = gb.getEnd(exon)
-			key = gb.getTranscript(exon)
+		for exon in exons.iterrows():
+			enumber = exon["exon number"]
+			estart = exon["exon start"]
+			eend = exon["exon end"]
+			key = exon["transcript id"]
 			for i in range(0, len(nodes)):
 				if(nodes[i]>=estart and nodee[i]<=eend):
 					nid[nodes[i]]= key+"-"+str(nodes[i])
@@ -164,42 +157,43 @@ class GraphBuild():
 			print("Warning: No connection information added")
 		
 
-po  = ParseOptions().getoptions()
-gb  = GraphBuild()
-sq  = SequenceAnalyser() 
-fn  = po.gf
-seq = po.ef
-out = po.out
+if __name__ == "__main__":
+	po  = ParseOptions().getoptions()
+	gb  = GraphBuild()
+	sq  = SequenceAnalyser() 
+	fn  = po.gf
+	seq = po.ef
+	out = po.out
 
-f = open(out, "w")
-nodes = []
-connections = []	
-		
-print("Reading Sequences")
-fasta = sq.FParser(seq)
-print("Done reading sequences")
+	f = open(out, "w")
+	nodes = []
+	connections = []	
+			
+	print("Reading Sequences")
+	fasta = sq.FParser(seq)
+	print("Done reading sequences")
 
-print("Reading and processing gtf")
-pg = ParseGTF(fn)
-print("Done reading gtf")
+	print("Reading and processing gtf")
+	pg = ParseGTF(fn)
+	print("Done reading gtf")
 
-print("Collecting all the genes")
-transcripts = pg.getAllGenes()
-print("Building graph for:")
+	print("Collecting all the genes")
+	transcripts = pg.getAllGenes()
+	print("Building graph for:")
 
-for transcript in transcripts:
-    print(transcript)
-    ex = pg.getExons(transcript)
-    start,end, chromosome = gb.SortExons(pg, ex)
-    cluster, cchromosome = gb.DefineCluster(start, end, chromosome)
-    ndst,nden,chrnod = gb.getNodePositions(cluster, cchromosome)	
-    nodeid=gb.getNodeID(pg, ndst, nden, ex)
-    nodes, connections = gb.getNodeConnections(nodeid, ndst, nden, chrnod, fasta, nodes, connections)
+	for transcript in transcripts:
+		print(transcript)
+		ex = pg.getExons(transcript)
+		start, end, chromosome = gb.SortExons(ex)
+		cluster, cchromosome = gb.DefineCluster(start, end, chromosome)
+		ndst,nden,chrnod = gb.getNodePositions(cluster, cchromosome)	
+		nodeid=gb.getNodeID(ndst, nden, ex)
+		nodes, connections = gb.getNodeConnections(nodeid, ndst, nden, chrnod, fasta, nodes, connections)
 
-for i in nodes:
-	f.write(i+"\n")
+	for i in nodes:
+		f.write(i+"\n")
 
-for i in connections:
-	f.write(i+"\n")
+	for i in connections:
+		f.write(i+"\n")
 
-gb.sanityCheck(nodes, connections)
+	gb.sanityCheck(nodes, connections)
