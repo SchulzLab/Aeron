@@ -3,13 +3,12 @@
 #1       havana  exon    13221   14409   .       +       .       gene_id "ENSG00000223972"; gene_version "5"; transcript_id "ENST00000456328"; transcript_version "2"; exon_number "3"; gene_name "DDX11L1"; gene_source "havana"; gene_biotype "transcribed_unprocessed_pseudogene"; transcript_name "DDX11L1-202"; transcript_source "havana"; transcript_biotype "processed_transcript"; exon_id "ENSE00002312635"; exon_version "1"; tag "basic"; transcript_support_level "1";
 
 import os
-import sys
 import re
+from tqdm import tqdm
 from collections import defaultdict
-import optparse
 from optparse import OptionParser
-from optparse import Option, OptionValueError
-from ParseGTF import *
+import pandas as pd
+from ParseGTF import ParseGTF
         
 class ParseOptions():
 	def getoptions(self):
@@ -48,118 +47,65 @@ class SequenceAnalyser():
 			Esequences[exon] = sequence[(gb.getStart(exon)-1):gb.getStart(exon)+length]
 		return Esequences
 
-class GraphBuild():
-	def SortExons(self, exons: pd.DataFrame):
-		exons_sorted = exons.sort_values(by="start")[["exon start", "exon end", "chr"]]
-		start, end, chromosome = exons_sorted["exon start"], exons_sorted["exon end"], exons_sorted["chr"]
-		
-		return start,end,chromosome
+
+def GraphBuild(exons: pd.DataFrame, Sequences):
+	splice_sites = exons[["exon start", "exon end"]].melt().sort_values("value")
+	nodes = getNodePositions(splice_sites)
+	nodes = getNodeID(nodes, exons)
+	nodes_out, corrections_out = getNodeConnections(nodes, Sequences)
 	
-	def DefineCluster(self, start, end, chromosome):
-		cluster = defaultdict(list)
-		cchromosome = defaultdict(list)
-		strt = start[0]
-		ed = end[0]
-		j=0;
-		for i in range(0, len(start)):
-			if(start[i] >= strt and end[i] <= ed):
-				if(start[i] not in cluster[j]):
-					cluster[j].append(start[i])
-					cchromosome[j].append(chromosome[i])
-				if(end[i] not in cluster[j]):
-					cluster[j].append(end[i])
-					cchromosome[j].append(chromosome[i])
-			elif(start[i] >= strt and start[i] <= ed):
-				if(start[i] not in cluster[j]):
-					cluster[j].append(start[i])
-					cchromosome[j].append(chromosome[i])
-				if(end[i] not in cluster[j]):
-					cluster[j].append(end[i])
-					cchromosome[j].append(chromosome[i])
-				ed = end[i]
-			elif (start[i] > ed):
-				j=j+1
-				strt = start[i]
-				ed = end[i]
-				if(start[i] not in cluster[j]):
-					cluster[j].append(start[i])
-					cchromosome[j].append(chromosome[i])
-				if(end[i] not in cluster[j]):
-					cluster[j].append(end[i])
-					cchromosome[j].append(chromosome[i])
-			else:
-				print("Something went wrong")
-				exit()
+	return nodes_out, corrections_out
 
-		for i in range(0, len(cluster)):
-			cluster[i] = sorted(cluster[i])
-			cchromosome[i] = sorted(cchromosome[i])
-		return cluster,cchromosome
+def getNodePositions(splice_sites: pd.DataFrame):
+	rows = splice_sites.iterrows()
+	_, prev_site = next(rows)
+	nodes = []
+	for _, curr_site in rows:
+		if prev_site["variable"] == "exon end" and curr_site["variable"] == "exon start":
+			nodes.append({"start": prev_site["value"], "end": curr_site["value"]})
+		prev_site = curr_site
 
-	def getNodeID(self, nodes, nodee, exons):
-		nid = {}
-		for exon in exons.iterrows():
-			enumber = exon["exon number"]
-			estart = exon["exon start"]
-			eend = exon["exon end"]
-			key = exon["transcript id"]
-			for i in range(0, len(nodes)):
-				if(nodes[i]>=estart and nodee[i]<=eend):
-					nid[nodes[i]]= key+"-"+str(nodes[i])
-		return nid 
-		
-	def getNodePositions(self, cluster, cchromosome):
-		nodes = []
-		nodee = []
-		chrnod = []
-		i=1
-		if(len(cluster) == 1 and len(cluster[0]) == 2):
-			nodes.append(cluster[0][0])
-			nodee.append(cluster[0][1])
-			chrnod.append(cchromosome[0][0])
-		else:
-			for i in range(0, len(cluster)):
-				for j in range(0,len(cluster[i])-1):
-					nodes.append(cluster[i][j])
-					nodee.append(cluster[i][j+1])
-					chrnod.append(cchromosome[i][j])
-		return nodes,nodee,chrnod
+	return pd.DataFrame(nodes)
+
+def getNodeID(nodes: pd.DataFrame, exons: pd.DataFrame):
+	nid = []
+	for _, node in nodes.iterrows():
+		is_grown = False
+		for _, exon in exons.iloc[::-1].iterrows():
+			if (node["start"] >= exon["exon start"] or node["end"] <= exon["exon end"]):
+				nid.append(f'{exon["transcript id"]}-{node["start"]}')
+				is_grown = True
+				break
+		if not is_grown:
+			raise ValueError("Node does not exist in exonic region.")
+	nodes.index = nid
+
+	return nodes
+
+def getNodeConnections(nodes: pd.DataFrame, Sequences):
+	nodes_out = [
+		f'S {idx}	{sequence[node["start"] - 1 : node["end"]]}' 
+		for (idx, node), sequence 
+		in zip(nodes.iterrows(), Sequences)
+	]
+	connections_out = []
+	nids = nodes.index.to_list()
+	for idx, nid_src in enumerate(nids):
+		for nid_dest in nids[idx + 1:]:
+			connections_out.append(f"L	{nid_src}	+	{nid_dest}	+	0M")
+
+	return nodes_out, connections_out
 	
-	def getNodeConnections(self, nodeid, ndst, nden, chrnod, Sequences, nodes, connections):
-		bookkeep = {}
-		for i in range(0, len(nodeid)):
-			bookkeep[nodeid[ndst[i]]]=0
 
-		for i in range(0, len(nodeid)):
-			chromo = chrnod[i]
-			key=">chr"+chromo
-			if(key in Sequences.keys()):
-				sequence = Sequences[key]			
-				length = (nden[i]-ndst[i])+1
-				if(len(ndst)>0):
-					if(len(ndst)==1):
-						sseq = sequence[ndst[i]-1:(ndst[i]+length)]			
-					if(i<=(len(ndst)-1)):
-						sseq = sequence[ndst[i]-1:(ndst[i]+length)]
-					nodes.append("S	"+str(nodeid[ndst[i]])+"	"+sseq)
-					bookkeep[str(nodeid[ndst[i]])] = 1
-		for i in range(0, len(nodeid)):
-			if(bookkeep[str(nodeid[ndst[i]])]==1):
-				for j in range(i+1, len(nodeid)):
-					if(bookkeep[str(nodeid[ndst[j]])]==1):
-						connections.append("L	"+str(nodeid[ndst[i]])+"	+	"+str(nodeid[ndst[j]])+"	+	0M")
-		return nodes, connections
-
-	def sanityCheck(self, nodes, connections):
-		if len(nodes)==0:
-			print("Warning: No sequence information added")
-		if len(connections)==0:
-			print("Warning: No connection information added")
+def sanityCheck(nodes, connections):
+	if len(nodes)==0:
+		print("Warning: No sequence information added")
+	if len(connections)==0:
+		print("Warning: No connection information added")
 		
 
 if __name__ == "__main__":
 	po  = ParseOptions().getoptions()
-	gb  = GraphBuild()
 	sq  = SequenceAnalyser() 
 	fn  = po.gf
 	seq = po.ef
@@ -177,23 +123,18 @@ if __name__ == "__main__":
 	pg = ParseGTF(fn)
 	print("Done reading gtf")
 
-	print("Collecting all the genes")
-	transcripts = pg.getAllGenes()
-	print("Building graph for:")
+	genes = pg.index.unique("gene id")
+	print("Building graph")
 
-	for transcript in transcripts:
-		print(transcript)
-		ex = pg.getExons(transcript)
-		start, end, chromosome = gb.SortExons(ex)
-		cluster, cchromosome = gb.DefineCluster(start, end, chromosome)
-		ndst,nden,chrnod = gb.getNodePositions(cluster, cchromosome)	
-		nodeid=gb.getNodeID(ndst, nden, ex)
-		nodes, connections = gb.getNodeConnections(nodeid, ndst, nden, chrnod, fasta, nodes, connections)
+	for gene in tqdm(genes):
+		nodes_of_gene, connections_of_gene = GraphBuild(pg.loc[gene], fasta)
+		nodes += nodes_of_gene
+		connections += connections_of_gene
 
-	for i in nodes:
-		f.write(i+"\n")
+	f.write("\n".join(nodes))
+	f.write("\n")
+	f.write("\n".join(connections))
 
-	for i in connections:
-		f.write(i+"\n")
+	sanityCheck(nodes, connections)
 
-	gb.sanityCheck(nodes, connections)
+	f.close()
